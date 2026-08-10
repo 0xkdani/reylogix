@@ -1,0 +1,41 @@
+# Dependencias
+node_modules/
+
+# Build
+dist/
+dist-ssr/
+*.local
+
+# Cache de TypeScript
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Variables de entorno (no hay ninguna hoy; el guard queda puesto)
+.env
+.env.*
+!.env.example
+
+# Editores
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Nota: public/img/ SÍ se versiona. Son los assets descargados de la página
+# fuente con scripts/fetch-images.ps1 y las URLs remotas de Google Sites caducan,
+# así que si no están en el repo no hay forma de recuperarlos.

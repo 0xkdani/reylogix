@@ -1,0 +1,273 @@
+import type { ComponentType, CSSProperties, SVGProps } from 'react'
+import { ChevronRight } from 'lucide-react'
+import { FORM_URL } from '../site'
+import type { SiteImageSrc } from '../images'
+
+/* ------------------------------------------------------------------ */
+/* SiteImage — intenta el archivo local y cae al original de Google    */
+/* ------------------------------------------------------------------ */
+
+/**
+ * `width`/`height` son las dimensiones intrínsecas del archivo, no un tamaño de
+ * render: reservan la caja antes de que la imagen cargue. Sin ellas el layout
+ * salta al terminar la descarga y desplaza todo lo que va debajo, incluido el
+ * destino de los enlaces de ancla.
+ */
+export function SiteImage({
+  src,
+  alt,
+  className,
+  width,
+  height,
+}: {
+  src: SiteImageSrc
+  alt: string
+  className?: string
+  width?: number
+  height?: number
+}) {
+  return (
+    <img
+      src={src.local}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      width={width}
+      height={height}
+      className={className}
+      onError={(e) => {
+        const el = e.currentTarget
+        if (el.dataset.fallback === 'done') return
+        el.dataset.fallback = 'done'
+        el.src = src.remote
+      }}
+    />
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* IconTile — placa para los iconos de línea                           */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Reemplaza al antiguo GraphicTile, que recortaba con zoom los JPEG de la
+ * fuente para esconder su título rasterizado. Ahora el icono es SVG propio
+ * (ver ServiceIcons), así que la placa solo tiene que enmarcarlo.
+ *
+ * Los estados `group-hover` responden a la tarjeta contenedora, no al tile.
+ */
+export function IconTile({
+  icon: Glyph,
+  className = 'w-14 h-14 xl:w-16 xl:h-16',
+}: {
+  icon: ComponentType<SVGProps<SVGSVGElement>>
+  className?: string
+}) {
+  return (
+    <div
+      className={`${className} shrink-0 rounded-xl border border-white/10 bg-white/[0.06] text-white/85 flex items-center justify-center transition-colors duration-500 group-hover:border-white/25 group-hover:bg-white/[0.1] group-hover:text-white`}
+    >
+      <Glyph className="w-7 h-7 xl:w-8 xl:h-8" />
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Avatar — retrato con monograma de respaldo                          */
+/* ------------------------------------------------------------------ */
+
+export function Avatar({
+  src,
+  name,
+  className = 'w-11 h-11 xl:w-12 xl:h-12',
+}: {
+  src?: SiteImageSrc
+  name: string
+  className?: string
+}) {
+  const initials = name
+    .split(' ')
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('')
+
+  return (
+    <div
+      className={`${className} relative rounded-full overflow-hidden shrink-0 bg-gradient-to-br from-[#B8CBD6]/35 to-[#1E2B36] flex items-center justify-center`}
+    >
+      <span className="text-sm font-semibold text-white">{initials}</span>
+      {src ? (
+        <img
+          src={src.local}
+          alt={name}
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover"
+          onError={(e) => {
+            const el = e.currentTarget
+            if (el.dataset.fallback !== 'done') {
+              el.dataset.fallback = 'done'
+              el.src = src.remote
+              return
+            }
+            // Sin local ni remoto: se descubre el monograma.
+            el.style.display = 'none'
+          }}
+        />
+      ) : null}
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* LogoMark                                                            */
+/* ------------------------------------------------------------------ */
+
+export function LogoMark({ className = 'w-8 h-8' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 256 256" fill="white" className={className} aria-hidden="true">
+      <path d="M 0 128 C 70.692 128 128 185.308 128 256 L 64 256 C 64 220.654 35.346 192 0 192 Z M 256 192 C 220.654 192 192 220.654 192 256 L 128 256 C 128 185.308 185.308 128 256 128 Z M 128 0 C 128 70.692 70.692 128 0 128 L 0 64 C 35.346 64 64 35.346 64 0 Z M 192 0 C 192 35.346 220.654 64 256 64 L 256 128 C 185.308 128 128 70.692 128 0 Z" />
+    </svg>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Botones                                                             */
+/* ------------------------------------------------------------------ */
+
+type ButtonProps = {
+  label: string
+  href?: string
+  full?: boolean
+}
+
+/**
+ * Todos los CTA salen a un Google Forms en pestaña nueva. El aviso va en
+ * `sr-only` porque un cambio de contexto sin anunciar desorienta a quien navega
+ * con lector de pantalla, y el icono no lo comunica.
+ */
+function NewTabHint() {
+  return <span className="sr-only"> (abre el formulario en una pestaña nueva)</span>
+}
+
+export function CTAButton({ label, href = FORM_URL, full = false }: ButtonProps) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`group inline-flex items-center justify-center gap-2 rounded-full bg-white text-black font-medium text-sm xl:text-base px-6 py-3 xl:px-7 xl:py-3.5 transition-all hover:bg-white/90 active:scale-[0.98] ${
+        full ? 'w-full' : ''
+      }`}
+    >
+      <span>
+        {label}
+        <NewTabHint />
+      </span>
+      <ChevronRight
+        className="w-4 h-4 transition-transform group-hover:translate-x-[1px]"
+        aria-hidden="true"
+      />
+    </a>
+  )
+}
+
+export function GhostButton({ label, href = FORM_URL, full = false }: ButtonProps) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      /* El fondo tenue no es decoración: sin él la estela clara del video pasa
+         por encima de la etiqueta y la parte en dos. */
+      className={`group inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-ink/50 backdrop-blur-sm text-white text-sm xl:text-base font-medium px-6 py-3 xl:px-7 xl:py-3.5 hover:bg-ink/70 hover:border-white/30 transition-all ${
+        full ? 'w-full' : ''
+      }`}
+    >
+      <span>
+        {label}
+        <NewTabHint />
+      </span>
+      <ChevronRight
+        className="w-4 h-4 transition-transform group-hover:translate-x-[1px]"
+        aria-hidden="true"
+      />
+    </a>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* SectionHeader                                                       */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Sin numeración: Enfoque / Servicios / Blackline / Casos son categorías, no
+ * pasos de un proceso. Un marcador 01-04 sugeriría una secuencia inexistente.
+ */
+export function SectionHeader({
+  label,
+  title,
+  intro,
+  align = 'left',
+  titleId,
+}: {
+  label: string
+  title: string
+  intro?: string
+  align?: 'left' | 'center'
+  /** Para que la <section> pueda referenciarlo con aria-labelledby. */
+  titleId?: string
+}) {
+  const centered = align === 'center'
+  return (
+    <div className={centered ? 'max-w-3xl mx-auto text-center' : 'max-w-3xl'}>
+      <div className={`flex items-center gap-3 ${centered ? 'justify-center' : ''}`}>
+        <span className="w-1.5 h-1.5 rounded-full bg-white" />
+        <span className="text-xs xl:text-sm uppercase tracking-[0.18em] text-white/60">{label}</span>
+        <span className="w-8 h-px bg-white/25" />
+      </div>
+
+      <h2
+        id={titleId}
+        className="mt-5 text-3xl md:text-5xl xl:text-6xl font-semibold tracking-tight leading-[1.02]"
+      >
+        {title}
+      </h2>
+
+      {intro ? (
+        <p
+          className={`mt-5 text-white/60 text-base xl:text-lg leading-[1.65] ${centered ? 'mx-auto' : ''}`}
+        >
+          {intro}
+        </p>
+      ) : null}
+    </div>
+  )
+}
+
+/* SectionDivider se retiró al pasar a rutas: ya no hay secciones que separar
+   dentro de una misma página. */
+
+/* ------------------------------------------------------------------ */
+/* Shiny gradient text style                                           */
+/* ------------------------------------------------------------------ */
+
+/**
+ * El gradiente original arrancaba y cerraba en #0A0C0F, que es exactamente
+ * --ink: pintaba parte del titular del mismo color que el fondo, así que con la
+ * animación buena parte del ciclo dejaba "Resultados reales." a 1:1 de
+ * contraste. Ahora el punto más oscuro es --steel (#6E8A9C ≈ 5.4:1 sobre ink):
+ * se conserva el barrido de brillo, pero nunca se pierde el texto.
+ */
+export const gradientStyle: CSSProperties = {
+  backgroundImage:
+    'linear-gradient(to right, #6E8A9C 0%, #8FA9B8 14%, #B8CBD6 30%, #E8F0F4 50%, #B8CBD6 70%, #8FA9B8 86%, #6E8A9C 100%)',
+  backgroundSize: '200% auto',
+  WebkitBackgroundClip: 'text',
+  backgroundClip: 'text',
+  color: 'transparent',
+  WebkitTextFillColor: 'transparent',
+  // El drop-shadow separa el titular del video sin atravesar el relleno
+  // transparente, que es lo que impide usar text-shadow aquí.
+  filter: 'url(#c3-noise) drop-shadow(0 2px 12px rgba(10, 12, 15, 0.9))',
+}
