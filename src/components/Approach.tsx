@@ -1,5 +1,4 @@
 import { motion } from 'motion/react'
-import { Features } from '@/components/ui/features-8'
 import { SectionHeader, SiteImage } from './primitives'
 import { IMAGES } from '../images'
 
@@ -65,14 +64,6 @@ export default function Approach() {
           </div>
         </motion.div>
       </div>
-
-      {/*
-        El componente trae `py-16 md:py-32`, que aquí sumaría al padding de la
-        sección. Hay que sobrescribir el padding EN LAS DOS variantes: pasar solo
-        `pt-*`/`pb-*` deja vivo el `md:py-32`, y en escritorio eso abría 256px de
-        aire entre los dos bloques (128 abajo del primero + 128 arriba del segundo).
-      */}
-      <Features className="px-0 pt-12 pb-0 md:pt-16 md:pb-0" />
     </section>
   )
 }

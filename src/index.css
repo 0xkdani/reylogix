@@ -45,7 +45,7 @@
     /* Superficie elevada de las Card de shadcn: un paso por encima del ink. */
     --card: 213 24% 8%;
     --card-foreground: 0 0% 100%;
-    /* Radio que pide `rounded-tl-[var(--radius)]` en features-8. */
+    /* Radio base de las primitivas de shadcn. */
     --radius: 0.75rem;
     /* Terna pura, sin alfa: si se le mete un `/ 0.12` aqui, cualquier clase con
        barra de opacidad (border-border/50) generaria un hsl() invalido. */
