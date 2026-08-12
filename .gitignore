@@ -39,3 +39,14 @@ Thumbs.db
 # Nota: public/img/ SÍ se versiona. Son los assets descargados de la página
 # fuente con scripts/fetch-images.ps1 y las URLs remotas de Google Sites caducan,
 # así que si no están en el repo no hay forma de recuperarlos.
+
+# Vercel: .vercel/ guarda los IDs del proyecto enlazado y .env.local el
+# VERCEL_OIDC_TOKEN que descarga el CLI al hacer link. Ninguno de los dos debe
+# viajar en el repo.
+#
+# La regla .env* la escribio el CLI al final del archivo, donde se comia el
+# !.env.example de mas arriba: en gitignore gana la ULTIMA regla que coincide,
+# asi que la excepcion se vuelve a declarar despues.
+.vercel
+.env*
+!.env.example
