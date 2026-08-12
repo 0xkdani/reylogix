@@ -1,8 +1,8 @@
 import type { SVGProps } from 'react'
 
 /**
- * Iconos de Servicios Express, dibujados a mano en el lenguaje de la marca:
- * línea blanca, trazo uniforme, sin relleno.
+ * Iconos de Servicios Express y de Sectores, dibujados a mano en el lenguaje de
+ * la marca: línea blanca, trazo uniforme, sin relleno.
  *
  * Sustituyen a los JPEG de la página fuente, que traían el título rasterizado
  * bajo el icono y había que recortar con un zoom del 175% (ver el antiguo
@@ -77,6 +77,75 @@ export function IconProcess(props: SVGProps<SVGSVGElement>) {
       <path d="m12.6 4.7 2 1.5-2 1.5" />
       <path d="M18.2 9v4.3a2.4 2.4 0 0 1-2.4 2.4H8.2a2.4 2.4 0 0 0-2.4 2.4v1.8" />
       <path d="m4.3 18.1 1.5 2 1.5-2" />
+    </Icon>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Sectores                                                            */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Cada sector se dibuja por su unidad de manejo —lo que efectivamente viaja por
+ * la cadena— y no por un símbolo de industria: es lo que comparten con los
+ * iconos de servicio, que también representan el objeto de la intervención.
+ */
+
+/** Manufactura alimentaria: producto envasado y etiquetado. */
+export function IconFood(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <ellipse cx="12" cy="5.4" rx="6.2" ry="2.4" />
+      <path d="M5.8 5.4v13.2c0 1.3 2.8 2.4 6.2 2.4s6.2-1.1 6.2-2.4V5.4" />
+      <path d="M5.8 10.4h12.4M5.8 15.4h12.4" />
+    </Icon>
+  )
+}
+
+/** Comercio exterior: la operación cruza fronteras. */
+export function IconTrade(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="9.2" />
+      <path d="M12 2.8c2.7 2.6 4.1 5.7 4.1 9.2s-1.4 6.6-4.1 9.2c-2.7-2.6-4.1-5.7-4.1-9.2S9.3 5.4 12 2.8" />
+      <path d="M3.2 9.2h17.6M3.2 14.8h17.6" />
+    </Icon>
+  )
+}
+
+/** Tecnología: componente de alto valor. */
+export function IconTech(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <rect x="7.6" y="7.6" width="8.8" height="8.8" rx="1.6" />
+      <rect x="10.6" y="10.6" width="2.8" height="2.8" rx="0.7" />
+      <path d="M9.6 3.4v4.2M14.4 3.4v4.2M9.6 16.4v4.2M14.4 16.4v4.2" />
+      <path d="M3.4 9.6h4.2M3.4 14.4h4.2M16.4 9.6h4.2M16.4 14.4h4.2" />
+    </Icon>
+  )
+}
+
+/** Cosméticos: envase regulado, con su etiqueta. */
+export function IconCosmetics(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <rect x="9.6" y="2.4" width="4.8" height="2.8" rx="0.9" />
+      <path d="M10.6 5.2v1.6M13.4 5.2v1.6" />
+      <rect x="7.6" y="6.8" width="8.8" height="14.4" rx="2.6" />
+      <path d="M7.6 12.2h8.8" />
+    </Icon>
+  )
+}
+
+/** Automotriz: la unidad que no puede parar la línea. */
+export function IconAutomotive(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <path d="m3.4 12.4 2-4.6a2.6 2.6 0 0 1 2.4-1.6h8.4a2.6 2.6 0 0 1 2.4 1.6l2 4.6" />
+      <path d="M2.4 12.4h19.2v4.2a1.4 1.4 0 0 1-1.4 1.4H3.8a1.4 1.4 0 0 1-1.4-1.4z" />
+      <circle cx="7.2" cy="18" r="1.9" />
+      <circle cx="16.8" cy="18" r="1.9" />
+      <path d="M5.2 15h1.6M17.2 15h1.6" />
     </Icon>
   )
 }
