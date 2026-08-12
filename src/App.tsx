@@ -3,7 +3,6 @@ import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-
 import { MotionConfig, useReducedMotion } from 'motion/react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
-import MethodStrip from './components/MethodStrip'
 import Approach from './components/Approach'
 import ExpressServices from './components/ExpressServices'
 import Sectors from './components/Sectors'
@@ -55,14 +54,13 @@ function useDocumentTitle() {
 }
 
 /**
- * Portada: la promesa, la franja de método y los sectores. El detalle de cada
- * frente vive en su propia ruta, que es lo que evita el scroll largo.
+ * Portada: la promesa y los sectores. El detalle de cada frente vive en su
+ * propia ruta, que es lo que evita el scroll largo.
  */
 function Home() {
   return (
     <>
       <Hero />
-      <MethodStrip />
       <Sectors />
     </>
   )
