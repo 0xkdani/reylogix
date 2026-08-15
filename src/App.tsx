@@ -1,19 +1,44 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { MotionConfig, useReducedMotion } from 'motion/react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
-import Approach from './components/Approach'
-import ExpressServices from './components/ExpressServices'
 import Sectors from './components/Sectors'
-import Testimonials from './components/Testimonials'
-import Blackline from './components/Blackline'
 import FinalCTA from './components/FinalCTA'
 import Footer from './components/Footer'
 import { HOME_TITLE, LEGACY_HASH_ROUTES, NAV_LINKS } from './nav'
 
-const VIDEO_SRC =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260508_064122_c4750c0e-7476-4b44-94a2-a85a65c63bf2.mp4'
+// Rutas fuera de Home: se cargan bajo demanda para no engordar el bundle
+// inicial con código que la primera pintura no necesita.
+const Approach = lazy(() => import('./components/Approach'))
+const ExpressServices = lazy(() => import('./components/ExpressServices'))
+const Testimonials = lazy(() => import('./components/Testimonials'))
+const Blackline = lazy(() => import('./components/Blackline'))
+
+// Recomprimido desde el original de CloudFront (16.5 MB, 1080p, 16 Mb/s) a
+// 720p/CRF 28 sin audio (el <video> ya va muted): 907 KB, ~94% más ligero.
+// Servirlo local también evita la conexión extra a un origen externo.
+const VIDEO_SRC = '/video/hero.mp4'
+
+/**
+ * El video es puramente decorativo (fondo fijo) y pesa varios MB: si se monta
+ * de inmediato compite por ancho de banda con el JS y las fuentes críticas.
+ * Se retrasa su montaje al primer 'idle' del navegador (en todos los tamaños,
+ * incluido móvil: la animación se conserva, solo deja de bloquear la primera
+ * pintura) para que esa carga quede detrás de todo lo que sí afecta el LCP.
+ */
+function useDeferredVideo() {
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    const idle = 'requestIdleCallback' in window ? window.requestIdleCallback : setTimeout
+    const cancel = 'cancelIdleCallback' in window ? window.cancelIdleCallback : clearTimeout
+    const id = idle(() => setReady(true))
+    return () => cancel(id)
+  }, [])
+
+  return ready
+}
 
 /**
  * Un enlace /#servicios de la época en que todo vivía en una sola página debe
@@ -70,6 +95,7 @@ export default function App() {
   // Con movimiento reducido no se monta el video: un bucle a pantalla completa
   // es justo lo que esa preferencia pide evitar.
   const reduceMotion = useReducedMotion()
+  const videoReady = useDeferredVideo()
 
   useLegacyHashRedirect()
   useScrollToTopOnNavigate()
@@ -91,12 +117,13 @@ export default function App() {
     <div className="relative min-h-screen overflow-x-clip bg-ink text-white">
       {/* Video de fondo global */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        {reduceMotion ? null : (
+        {reduceMotion || !videoReady ? null : (
           <video
             autoPlay
             loop
             muted
             playsInline
+            preload="none"
             aria-hidden="true"
             className="w-full h-full object-cover pointer-events-none"
             src={VIDEO_SRC}
@@ -139,14 +166,16 @@ export default function App() {
           {/* El CTA final y el footer son comunes a todas las rutas: así nunca
               se llega al fondo de una sección sin una salida a la vista. */}
           <main className="flex-1">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/enfoque" element={<Approach />} />
-              <Route path="/servicios" element={<ExpressServices />} />
-              <Route path="/blackline" element={<Blackline />} />
-              <Route path="/casos" element={<Testimonials />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
+            <Suspense fallback={null}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/enfoque" element={<Approach />} />
+                <Route path="/servicios" element={<ExpressServices />} />
+                <Route path="/blackline" element={<Blackline />} />
+                <Route path="/casos" element={<Testimonials />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </Suspense>
           </main>
 
           <FinalCTA />
