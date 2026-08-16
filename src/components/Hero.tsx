@@ -40,7 +40,7 @@ export default function Hero() {
         transition={{ duration: 0.8, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mt-10 flex flex-col sm:flex-row items-center gap-3"
       >
-        <CTAButton label="Empieza a operar sin límites" />
+        <CTAButton label="Empieza a operar sin límites" href="#contacto" external={false} />
         <GhostButton label="Solicita tu servicio express" />
       </motion.div>
     </section>

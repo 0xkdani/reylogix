@@ -4,12 +4,15 @@ import { MotionConfig, useReducedMotion } from 'motion/react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Sectors from './components/Sectors'
+import Contact from './components/Contact'
 import FinalCTA from './components/FinalCTA'
 import Footer from './components/Footer'
+import CookieConsent from './components/CookieConsent'
 import { HOME_TITLE, LEGACY_HASH_ROUTES, NAV_LINKS } from './nav'
 
 // Rutas fuera de Home: se cargan bajo demanda para no engordar el bundle
-// inicial con código que la primera pintura no necesita.
+// inicial con código que la primera pintura no necesita. Contact no va aquí:
+// vive en Home (ver más abajo), así que ya viaja en el bundle inicial.
 const Approach = lazy(() => import('./components/Approach'))
 const ExpressServices = lazy(() => import('./components/ExpressServices'))
 const Testimonials = lazy(() => import('./components/Testimonials'))
@@ -60,13 +63,25 @@ function useLegacyHashRedirect() {
  * entraría a mitad de la sección nueva. 'instant' y no el valor por defecto
  * porque el <html> lleva scroll-behavior: smooth y convertiría cada cambio de
  * página en un viaje animado.
+ *
+ * Si la navegación trae un hash (el CTA "Empieza a operar sin límites" manda a
+ * "/#contacto" desde cualquier ruta), se salta a ese elemento en vez de al
+ * tope: es lo que permite que el mismo botón funcione estando ya en Home o
+ * viniendo de Enfoque/Servicios/etc.
  */
 function useScrollToTopOnNavigate() {
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
 
   useEffect(() => {
+    if (hash) {
+      const el = document.getElementById(hash.slice(1))
+      if (el) {
+        el.scrollIntoView({ behavior: 'instant' })
+        return
+      }
+    }
     window.scrollTo({ top: 0, behavior: 'instant' })
-  }, [pathname])
+  }, [pathname, hash])
 }
 
 /** El <title> lo fija la ruta activa. */
@@ -87,6 +102,7 @@ function Home() {
     <>
       <Hero />
       <Sectors />
+      <Contact />
     </>
   )
 }
@@ -131,16 +147,6 @@ export default function App() {
         )}
       </div>
 
-      {/* Vertical guide lines, ancladas a los bordes del shell */}
-      <div
-        className="hidden md:block pointer-events-none fixed inset-y-0 left-1/2 w-px bg-white/10 z-[5]"
-        style={{ transform: 'translateX(calc(-50% - var(--shell) / 2))' }}
-      />
-      <div
-        className="hidden md:block pointer-events-none fixed inset-y-0 left-1/2 w-px bg-white/10 z-[5]"
-        style={{ transform: 'translateX(calc(-50% + var(--shell) / 2))' }}
-      />
-
       {/* Filtro de ruido global (titular con gradiente) */}
       <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
         <filter id="c3-noise">
@@ -182,6 +188,8 @@ export default function App() {
           <Footer />
         </div>
       </MotionConfig>
+
+      <CookieConsent />
     </div>
   )
 }

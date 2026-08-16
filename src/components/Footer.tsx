@@ -1,6 +1,6 @@
 import { Link, NavLink } from 'react-router-dom'
 import { LogoMark } from './primitives'
-import { BRAND, FORM_URL, TAGLINE } from '../site'
+import { BRAND, TAGLINE } from '../site'
 import { NAV_LINKS } from '../nav'
 
 export default function Footer() {
@@ -27,15 +27,6 @@ export default function Footer() {
               {l.label}
             </NavLink>
           ))}
-          {/* TODO: sustituir por correo/teléfono reales cuando existan. */}
-          <a
-            href={FORM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-white/60 hover:text-white transition-colors"
-          >
-            Contacto
-          </a>
         </nav>
       </div>
 

@@ -1,4 +1,5 @@
 import type { ComponentType, CSSProperties, SVGProps } from 'react'
+import { Link } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
 import { FORM_URL } from '../site'
 import type { SiteImageSrc } from '../images'
@@ -139,10 +140,16 @@ type ButtonProps = {
   label: string
   href?: string
   full?: boolean
+  /**
+   * false para destinos internos (p. ej. "/#contacto"): navegan con el router,
+   * en la misma pestaña y sin el aviso de cambio de contexto. Por defecto es
+   * true porque el uso histórico de estos botones es el Google Forms externo.
+   */
+  external?: boolean
 }
 
 /**
- * Todos los CTA salen a un Google Forms en pestaña nueva. El aviso va en
+ * Los CTA externos (Google Forms) salen en pestaña nueva. El aviso va en
  * `sr-only` porque un cambio de contexto sin anunciar desorienta a quien navega
  * con lector de pantalla, y el icono no lo comunica.
  */
@@ -150,48 +157,63 @@ function NewTabHint() {
   return <span className="sr-only"> (abre el formulario en una pestaña nueva)</span>
 }
 
-export function CTAButton({ label, href = FORM_URL, full = false }: ButtonProps) {
+function ButtonIcon() {
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`group inline-flex items-center justify-center gap-2 rounded-full bg-white text-black font-medium text-sm xl:text-base px-6 py-3 xl:px-7 xl:py-3.5 transition-all hover:bg-white/90 active:scale-[0.98] ${
-        full ? 'w-full' : ''
-      }`}
-    >
+    <ChevronRight
+      className="w-4 h-4 transition-transform group-hover:translate-x-[1px]"
+      aria-hidden="true"
+    />
+  )
+}
+
+export function CTAButton({ label, href = FORM_URL, full = false, external = true }: ButtonProps) {
+  const className = `group inline-flex items-center justify-center gap-2 rounded-full bg-white text-black font-medium text-sm xl:text-base px-6 py-3 xl:px-7 xl:py-3.5 transition-all hover:bg-white/90 active:scale-[0.98] ${
+    full ? 'w-full' : ''
+  }`
+
+  if (!external) {
+    return (
+      <Link to={href} className={className}>
+        <span>{label}</span>
+        <ButtonIcon />
+      </Link>
+    )
+  }
+
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
       <span>
         {label}
         <NewTabHint />
       </span>
-      <ChevronRight
-        className="w-4 h-4 transition-transform group-hover:translate-x-[1px]"
-        aria-hidden="true"
-      />
+      <ButtonIcon />
     </a>
   )
 }
 
-export function GhostButton({ label, href = FORM_URL, full = false }: ButtonProps) {
+export function GhostButton({ label, href = FORM_URL, full = false, external = true }: ButtonProps) {
+  /* El fondo tenue no es decoración: sin él la estela clara del video pasa
+     por encima de la etiqueta y la parte en dos. */
+  const className = `group inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-ink/50 backdrop-blur-sm text-white text-sm xl:text-base font-medium px-6 py-3 xl:px-7 xl:py-3.5 hover:bg-ink/70 hover:border-white/30 transition-all ${
+    full ? 'w-full' : ''
+  }`
+
+  if (!external) {
+    return (
+      <Link to={href} className={className}>
+        <span>{label}</span>
+        <ButtonIcon />
+      </Link>
+    )
+  }
+
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      /* El fondo tenue no es decoración: sin él la estela clara del video pasa
-         por encima de la etiqueta y la parte en dos. */
-      className={`group inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-ink/50 backdrop-blur-sm text-white text-sm xl:text-base font-medium px-6 py-3 xl:px-7 xl:py-3.5 hover:bg-ink/70 hover:border-white/30 transition-all ${
-        full ? 'w-full' : ''
-      }`}
-    >
+    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
       <span>
         {label}
         <NewTabHint />
       </span>
-      <ChevronRight
-        className="w-4 h-4 transition-transform group-hover:translate-x-[1px]"
-        aria-hidden="true"
-      />
+      <ButtonIcon />
     </a>
   )
 }

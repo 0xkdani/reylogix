@@ -34,7 +34,7 @@ export default function FinalCTA() {
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <CTAButton label="Empieza a operar sin límites" />
+            <CTAButton label="Empieza a operar sin límites" href="/#contacto" external={false} />
             <GhostButton label="Solicitar acceso a Blackline" />
           </div>
         </div>
