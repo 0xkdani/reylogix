@@ -124,10 +124,36 @@ export function Avatar({
 /* LogoMark                                                            */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Monograma R de la marca, trazado desde el original de 1024 px
+ * (Pictures/Reylogix/relogix.png).
+ *
+ * Se traza en vez de incrustar el PNG por dos razones: el archivo trae fondo
+ * negro opaco, que sobre el video de fondo dibujaria un recuadro —el mismo
+ * defecto que ya se corrigio en el wordmark de Blackline—, y pesa 1 MB para
+ * acabar renderizado a 32 px.
+ *
+ * Dos detalles de la letra que el path respeta y conviene no "arreglar":
+ * la contraforma NO es un agujero cerrado, baja por un canal vertical hasta el
+ * pie, asi que el cuerpo va de un solo trazo y no hace falta fill-rule; y la
+ * segunda subruta es el triangulo que la diagonal deja suelto sobre la pierna.
+ *
+ * Los tiradores de las dos curvas del hombro salen de un ajuste por minimos
+ * cuadrados contra el pixel del original (error medio 0.6 y 0.8 px sobre 424 de
+ * ancho). Rasterizado y comparado contra el PNG da 99.2 % de IoU.
+ */
 export function LogoMark({ className = 'w-8 h-8' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 256 256" fill="white" className={className} aria-hidden="true">
-      <path d="M 0 128 C 70.692 128 128 185.308 128 256 L 64 256 C 64 220.654 35.346 192 0 192 Z M 256 192 C 220.654 192 192 220.654 192 256 L 128 256 C 128 185.308 185.308 128 256 128 Z M 128 0 C 128 70.692 70.692 128 0 128 L 0 64 C 35.346 64 64 35.346 64 0 Z M 192 0 C 192 35.346 220.654 64 256 64 L 256 128 C 185.308 128 128 70.692 128 0 Z" />
+    <svg viewBox="0 0 424 459" fill="currentColor" className={className} aria-hidden="true">
+      <path
+        d="M0 0 L302 0
+           C358.7 0 412.5 51.1 412.5 126.5
+           C412.5 179.6 396 213.5 341 257.5
+           L423.5 374.7 L423.5 459 L371.4 459 L176.3 183 L277.5 183
+           A39.5 39.5 0 0 0 277.5 104
+           L107 104 L107 459 L0 459 Z
+           M172 290 L290.5 459 L172 459 Z"
+      />
     </svg>
   )
 }

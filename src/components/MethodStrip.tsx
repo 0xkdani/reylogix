@@ -1,4 +1,4 @@
-import { motion } from 'motion/react'
+import { m } from 'motion/react'
 import { Globe } from 'lucide-react'
 import { LogoMark } from './primitives'
 import { BRAND } from '../site'
@@ -8,7 +8,7 @@ const METHODS = ['Lean', 'Six Sigma', 'Mejora continua', 'Comercio exterior', 'C
 
 export default function MethodStrip() {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.9, ease: 'easeOut' }}
@@ -36,6 +36,6 @@ export default function MethodStrip() {
           <span className="sm:hidden">Nacional e internacional</span>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   )
 }

@@ -149,3 +149,66 @@ export function IconAutomotive(props: SVGProps<SVGSVGElement>) {
     </Icon>
   )
 }
+
+/* ------------------------------------------------------------------ */
+/* Enfoque                                                             */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Los tres pilares que el propio texto de Enfoque enumera. Sustituyen al
+ * collage de clipart que traia la pagina fuente: iconos de estilos distintos
+ * rasterizados en un solo JPEG, que ni compartian grosor de trazo con el resto
+ * del sitio ni se podian separar para acompanar a cada idea.
+ *
+ * Ninguno reutiliza un glifo ya usado. En particular el de vision internacional
+ * NO es el globo de IconTrade: ese ya significa "comercio exterior" en
+ * Sectores, y repetirlo con otro significado en otra pagina confunde.
+ */
+
+/**
+ * Análisis profundo: las capas de la operación, apiladas.
+ *
+ * La lupa seria el glifo obvio, pero en este sitio ya esta tomada: es la de
+ * IconCosts, que significa "Auditoria de Costos Logisticos". Dos lupas con
+ * significados distintos se leen como el mismo icono repetido, asi que la
+ * profundidad se dice por estratos.
+ */
+export function IconAnalysis(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <path d="m12 2.6 9.2 5.1-9.2 5.1-9.2-5.1z" />
+      <path d="m2.8 12.4 9.2 5.1 9.2-5.1" />
+      <path d="m2.8 16.8 9.2 5.1 9.2-5.1" />
+    </Icon>
+  )
+}
+
+/** Ejecución precisa: la retícula que da en el centro. */
+export function IconPrecision(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="7.2" />
+      <circle cx="12" cy="12" r="2.7" />
+      <path d="M12 1.9v3.4M12 18.7v3.4M1.9 12h3.4M18.7 12h3.4" />
+    </Icon>
+  )
+}
+
+/**
+ * Visión internacional: el planeta con una órbita alrededor, el alcance que
+ * rodea la operación.
+ *
+ * La orbita inclinada es lo que lo separa de IconTrade: aquel es un globo con
+ * meridiano y paralelos, y a 24 px la diferencia entre "esfera reticulada" y
+ * "esfera con anillo" se sostiene. Probadas y descartadas dos variantes que a
+ * ese tamano se caian: el mapa con ruta (los nodos desaparecian) y el
+ * hemisferio con arco (se leia como un puente).
+ */
+export function IconInternational(props: SVGProps<SVGSVGElement>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="6.4" />
+      <ellipse cx="12" cy="12" rx="10.6" ry="4.3" transform="rotate(-28 12 12)" />
+    </Icon>
+  )
+}

@@ -1,10 +1,10 @@
-import { motion } from 'motion/react'
+import { m } from 'motion/react'
 import { CTAButton, GhostButton } from './primitives'
 
 export default function FinalCTA() {
   return (
     <section className="shell py-20 md:py-32">
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
@@ -38,7 +38,7 @@ export default function FinalCTA() {
             <GhostButton label="Solicitar acceso a Blackline" />
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </section>
   )
 }

@@ -1,3 +1,111 @@
+/* ------------------------------------------------------------------ */
+/* Inter, auto-alojada                                                 */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Antes la fuente venia de fonts.googleapis.com con un <link rel="stylesheet">
+ * en el head. Eso cuesta, antes de la primera pintura: DNS + TLS a
+ * googleapis.com, la hoja de estilos (que bloquea el render), y despues DNS +
+ * TLS a gstatic.com para el .woff2. Los dos preconnect ayudaban, pero seguian
+ * siendo dos origenes externos en el camino critico.
+ *
+ * Ahora los .woff2 se sirven desde el propio dominio y se precargan desde
+ * index.html, asi que no hay hoja que bloquee ni conexiones extra.
+ *
+ * Los bloques son copia literal de los que servia Google (misma version v20,
+ * mismos unicode-range, mismo font-display): cuatro pesos apuntando al MISMO
+ * archivo por subconjunto, que es como Google entrega Inter. Se replican tal
+ * cual, con sus cuatro font-weight, en vez de colapsarlos en un rango
+ * `100 900`: asi el resultado es identico al de hoy sin depender de comprobar
+ * si el archivo trae eje variable.
+ *
+ * Solo se traen latin y latin-ext. Cyrillic, greek y vietnamese no los pide
+ * ningun texto del sitio, y con unicode-range el navegador nunca los llegaba a
+ * descargar. En la practica solo viaja inter-latin.woff2 (47 KB): el castellano
+ * —incluidas ñ, á, ü— cae entero dentro de U+0000-00FF.
+ *
+ * Ojo si se tocan los pesos: .c3-wordmark (900) y .c3-watermark-main (800) no
+ * estan declarados aqui, igual que no lo estaban en el link de Google, asi que
+ * el navegador los sintetiza. Para que sean reales hay que anadir sus bloques.
+ */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+    U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
+    U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+    U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
+    U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+    U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
+    U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+    U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
+    U+2C60-2C7F, U+A720-A7FF;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -141,6 +249,41 @@
       0 0 34px rgba(10, 12, 15, 0.7);
   }
 
+  /* ---------------------------------------------------------------- */
+  /* reveal-up — entradas de la mitad superior, sin pasar por JS      */
+  /* ---------------------------------------------------------------- */
+
+  /**
+   * Mismo gesto que hacian los `motion.div` del hero y del navbar (misma curva,
+   * misma distancia, mismos retardos), pero en CSS.
+   *
+   * El motivo es de rendimiento, no de estilo: las features de motion se cargan
+   * en un chunk aparte (ver LazyMotion en App.tsx) y un elemento con
+   * `initial: { opacity: 0 }` se queda invisible hasta que ese chunk llega. Para
+   * lo que hay debajo del pliegue da igual —cuando el usuario baja ya cargo—,
+   * pero el titular del hero es el elemento LCP: retrasarlo por una animacion
+   * decorativa es justo lo que se estaba intentando evitar. En CSS pinta en
+   * cuanto React monta, sin esperar a nada.
+   *
+   * `both` sostiene el estado inicial durante el retardo. Bajo
+   * prefers-reduced-motion la regla global deja la duracion en 0.01ms, asi que
+   * el elemento aparece ya en su estado final en vez de quedarse a medias.
+   */
+  @keyframes reveal-up {
+    from {
+      opacity: 0;
+      transform: translateY(var(--reveal-from, 20px));
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .reveal-up {
+    animation: reveal-up var(--reveal-duration, 0.8s)
+      var(--reveal-ease, cubic-bezier(0.22, 1, 0.36, 1)) var(--reveal-delay, 0s) both;
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -300,25 +443,245 @@
   -webkit-text-fill-color: transparent;
 }
 
-.c3-intro {
+/* ------------------------------------------------------------------ */
+/* Corredor de imagenes de Blackline                                   */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Sustituye a la placa de tres parrafos que abria la seccion.
+ *
+ * Historia, porque explica cada decision de aqui abajo: eran 120 palabras
+ * centradas a 60rem —mas de 110 caracteres por linea— sueltas sobre el video.
+ * Primero se arreglo la legibilidad (izquierda, medida acotada, placa solida),
+ * pero el problema que quedaba no era de contraste sino de cantidad. Ahora el
+ * bloque lo lleva el corredor de imagenes y encima va solo la frase corta.
+ *
+ * Misma anchura que .c3-grid--duo para que corredor y tarjetas compartan eje.
+ */
+.c3-stream {
   position: relative;
   z-index: 3;
   width: 100%;
-  max-width: 60rem;
+  max-width: 62rem;
   margin-top: 48px;
-  text-align: center;
+  /* Ni tan bajo que el corredor no tenga recorrido ni tan alto que empuje las
+     tarjetas fuera de la primera pantalla. Escala con el ancho porque las
+     tarjetas se dimensionan en cqw. Las tarjetas se concentran en la banda
+     central, asi que pasarse de alto solo anade fondo muerto arriba y abajo. */
+  height: clamp(22rem, 45vw, 29rem);
+  border-radius: 28px;
+  /*
+   * Base del bloque, y es lo que da el equilibrio entre las dos capas.
+   *
+   * El corredor no tiene fondo propio, asi que el video global del sitio se ve
+   * a traves. Sin esta base, su estela clara cruzaba el bloque en diagonal y
+   * donde pasaba se comia las tarjetas: el fondo no tenia protagonismo, tenia
+   * atropello. Con un velo tenue y el desenfoque, el video sigue presente —su
+   * color y su movimiento se notan— pero pierde el filo, y las tarjetas se
+   * despegan. Es la misma receta de .liquid-glass, a la mitad de intensidad,
+   * porque aqui no se trata de tapar el fondo sino de dejarlo respirar.
+   */
+  background: rgba(10, 12, 15, 0.42);
+  backdrop-filter: blur(10px) saturate(0.9);
+  -webkit-backdrop-filter: blur(10px) saturate(0.9);
+}
+
+/**
+ * Tratamiento de acero sobre las tarjetas.
+ *
+ * Las nueve fotos vienen de nueve autores distintos de Unsplash y llegan con
+ * dominantes que pelean con la paleta —naranja de sodio en los puertos, rojo de
+ * las velas de trading—. Desaturar y subir un punto el contraste las lleva a
+ * todas al mismo terreno acromatico con sesgo acero que usa la marca, que es lo
+ * que evita que el corredor parezca un tablero de stock.
+ *
+ * No se baja el brillo aqui: de eso ya se encarga el velo, y encadenar las dos
+ * cosas dejaba el corredor tan oscuro que las imagenes no se leian.
+ */
+.c3-stream img {
+  /* El brightness sube en vez de bajar: las nueve son nocturnas y, ya
+     desaturadas y bajo el velo, sin este empujon quedaban en un gris turbio del
+     que no se distinguia que hubiera imagenes. */
+  filter: saturate(0.45) contrast(1.08) brightness(1.12);
+}
+
+/**
+ * El velo protege la lectura del texto, y con el corredor quieto puede ser
+ * mucho mas suave que con el en marcha.
+ *
+ * Es la razon de ser de `still`. Con las tarjetas moviendose, el contraste bajo
+ * cada palabra cambiaba fotograma a fotograma, asi que hacia falta hundir el
+ * centro casi a negro —y entonces las imagenes no se veian, que era pagar 317
+ * KB por nada—. Congelado, el fondo de cada letra es fijo: basta con asegurar
+ * la banda donde cae el texto y el resto puede respirar.
+ *
+ * Dos capas con trabajos distintos. La radial asienta el centro. La lineal
+ * cierra arriba y abajo para que el corredor no choque de golpe con el borde
+ * del bloque. Los laterales quedan limpios a proposito: es donde estan las
+ * tarjetas grandes y donde se ve que hay fotografia de verdad.
+ */
+.c3-stream-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      44% 40% at 50% 50%,
+      rgba(10, 12, 15, 0.8) 0%,
+      rgba(10, 12, 15, 0.45) 62%,
+      rgba(10, 12, 15, 0) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(10, 12, 15, 0.6) 0%,
+      rgba(10, 12, 15, 0) 30%,
+      rgba(10, 12, 15, 0) 70%,
+      rgba(10, 12, 15, 0.62) 100%
+    );
+}
+
+/*
+ * En pantalla estrecha el velo tiene que trabajar mucho mas, y no es un ajuste
+ * de gusto: las tarjetas se dimensionan en cqw, asi que al angostarse el
+ * contenedor no se hacen pequenas, se hacen *proporcionalmente iguales* con
+ * menos sitio. Solo caben dos o tres, y las grandes caen justo sobre el primer
+ * renglon del listado ("Liderado personalmente por el fundador" se leia encima
+ * de una foto de velas de trading). Ademas deja de leerse como corredor: tres
+ * fragmentos sueltos parecen un error, no una perspectiva.
+ *
+ * Se ensancha y se opaca la radial para que la copia caiga sobre base solida, y
+ * la lineal se abre en el centro porque ya no hace falta que cierre ahi. Las
+ * fotos siguen asomando en las esquinas, que en movil es todo lo que puede
+ * aportar el corredor: textura, no profundidad.
+ */
+@media (max-width: 768px) {
+  .c3-stream-veil {
+    background:
+      radial-gradient(
+        72% 58% at 50% 50%,
+        rgba(10, 12, 15, 0.95) 0%,
+        rgba(10, 12, 15, 0.78) 68%,
+        rgba(10, 12, 15, 0.2) 100%
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(10, 12, 15, 0.72) 0%,
+        rgba(10, 12, 15, 0.12) 32%,
+        rgba(10, 12, 15, 0.12) 68%,
+        rgba(10, 12, 15, 0.74) 100%
+      );
+  }
+}
+
+.c3-stream-copy {
+  position: relative;
+  z-index: 1;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+/**
+ * Centrado, al reves que el resto del texto largo del sitio, y no es una
+ * contradiccion: son dos oraciones cortas sobre un eje simetrico, no un parrafo
+ * de lectura seguida. Centrar falla por la medida, no por el centrado en si.
+ */
+.c3-stream-claim {
+  max-width: 34rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: clamp(1.15rem, 2.6vw, 1.6rem);
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+/* El balance va en cada linea y no solo en el <p>: son dos bloques flex
+   independientes, y sin esto la primera partia en "No hay intermediarios. No /
+   hay formulas genericas.", dejando un "No" colgando al final del renglon. */
+.c3-stream-claim span,
+.c3-stream-claim strong {
+  display: block;
+  text-wrap: balance;
+}
+
+.c3-stream-claim span {
+  color: rgba(255, 255, 255, 0.62);
+  font-weight: 400;
+}
+
+.c3-stream-claim strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+/**
+ * Los cinco atributos son frases sacadas textualmente de los parrafos de la
+ * fuente, asi que funcionan de resumen: con el recorte, son lo que sostiene las
+ * afirmaciones que ya no estan desarrolladas. Usan el mismo gesto de palomita
+ * que el listado de features de las dos tarjetas de programa.
+ */
+.c3-highlights {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 18px;
+  max-width: 44rem;
+}
+
+/**
+ * Parrafo de cierre, fuera del corredor y sobre placa solida: a 22 palabras ya
+ * pide lectura seguida, y eso no se hace encima de imagenes que se mueven.
+ */
+.c3-closing {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 62rem;
+  margin: 16px 0 0;
+  padding: 22px 28px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.58));
+  backdrop-filter: blur(14px) brightness(0.92);
+  -webkit-backdrop-filter: blur(14px) brightness(0.92);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
   font-size: 0.95rem;
   line-height: 1.7;
-  /* Texto largo directamente sobre el video: mismo halo que .text-plate. Aqui va
-     en CSS y no como clase porque el bloque se compone desde estilos c3. */
   color: rgba(255, 255, 255, 0.72);
-  text-shadow:
-    0 1px 2px rgba(10, 12, 15, 0.95),
-    0 2px 14px rgba(10, 12, 15, 0.88),
-    0 0 34px rgba(10, 12, 15, 0.7);
+}
+
+/* Cada atributo es una ficha de una linea: nowrap para que un salto no parta
+   "Cobertura nacional e internacional" y deje la palomita huerfana. */
+.c3-highlights li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.85rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+/* La palomita de 28px es la escala de las tarjetas, donde acompana a cinco
+   features con aire de sobra. Aqui, en una tira horizontal, pesa demasiado. */
+.c3-highlights .c3-check {
+  width: 20px;
+  height: 20px;
+}
+
+.c3-highlights .c3-check svg {
+  width: 11px;
+  height: 11px;
 }
 
 

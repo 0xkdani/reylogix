@@ -17,4 +17,14 @@ export default defineConfig({
       '@': '/src',
     },
   },
+  server: {
+    watch: {
+      /*
+       * scripts/lighthouse.ps1 escribe sus reportes dentro del proyecto, y el
+       * watcher los tomaba por cambios del sitio: medir con el dev server
+       * abierto le provocaba una recarga completa a media sesión.
+       */
+      ignored: ['**/.lighthouse/**'],
+    },
+  },
 })

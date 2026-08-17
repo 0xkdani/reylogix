@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, m } from 'motion/react'
 import { Menu, X } from 'lucide-react'
 import { CTAButton, LogoMark } from './primitives'
 import { BRAND } from '../site'
@@ -51,11 +51,20 @@ export default function Navbar() {
       />
 
       <div className="shell">
-        <motion.nav
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="flex items-center justify-between py-5 xl:py-6"
+        {/* La barra y sus enlaces entran con la utilidad CSS `reveal-up` en vez
+            de con `m.*`: estan sobre el pliegue y no deben esperar al chunk de
+            features de motion (ver Hero.tsx y LazyMotion en App.tsx). El panel
+            movil de mas abajo si se queda en motion, porque necesita animacion
+            de salida y para entonces el chunk lleva rato cargado. */}
+        <nav
+          style={
+            {
+              '--reveal-duration': '0.6s',
+              '--reveal-from': '-10px',
+              '--reveal-ease': 'ease-out',
+            } as CSSProperties
+          }
+          className="reveal-up flex items-center justify-between py-5 xl:py-6"
         >
           <Link to="/" className="flex items-center gap-3">
             <LogoMark className="w-8 h-8 xl:w-9 xl:h-9" />
@@ -64,11 +73,17 @@ export default function Navbar() {
 
           <div className="hidden md:flex gap-8 xl:gap-10">
             {NAV_LINKS.map((link, i) => (
-              <motion.div
+              <div
                 key={link.to}
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 + i * 0.05, ease: 'easeOut' }}
+                style={
+                  {
+                    '--reveal-duration': '0.5s',
+                    '--reveal-delay': `${0.1 + i * 0.05}s`,
+                    '--reveal-from': '-8px',
+                    '--reveal-ease': 'ease-out',
+                  } as CSSProperties
+                }
+                className="reveal-up"
               >
                 {/* NavLink pone aria-current="page" solo: la ruta activa se
                     anuncia, no solo se ve. */}
@@ -82,7 +97,7 @@ export default function Navbar() {
                 >
                   {link.label}
                 </NavLink>
-              </motion.div>
+              </div>
             ))}
           </div>
 
@@ -104,7 +119,7 @@ export default function Navbar() {
               <Menu className="w-4 h-4 text-white" aria-hidden="true" />
             )}
           </button>
-        </motion.nav>
+        </nav>
       </div>
 
       <AnimatePresence>
@@ -117,7 +132,7 @@ export default function Navbar() {
               onClick={() => setOpen(false)}
               className="md:hidden fixed inset-0 -z-10 bg-ink/60"
             />
-            <motion.div
+            <m.div
               id="menu-movil"
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -147,7 +162,7 @@ export default function Navbar() {
                   <CTAButton label="Empieza a operar sin límites" full />
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           </>
         ) : null}
       </AnimatePresence>

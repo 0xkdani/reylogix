@@ -15,11 +15,16 @@ import { IMAGES } from '@/images'
  *     avatares de GitHub por los retratos de cliente que ya publica el sitio.
  */
 
-/** Personas de la última tarjeta: perfiles ya publicados en Casos de éxito. */
+/**
+ * Personas de la última tarjeta: perfiles ya publicados en Casos de éxito.
+ * Los retratos siguen la reasignación del 15-ago-2026, la misma que QUOTES en
+ * Testimonials.tsx, para que las dos secciones no muestren caras distintas
+ * para el mismo nombre si este bloque se vuelve a montar.
+ */
 const PEOPLE = [
-  { label: 'R. Espinoza', avatar: IMAGES.casoRodrigo.local },
-  { label: 'J. Ortiz', avatar: IMAGES.casoJulian.local },
-  { label: 'J. Mendoza', avatar: IMAGES.casoJhonatan.local },
+  { label: 'R. Espinoza', avatar: IMAGES.retratoTrajeBlanco.local },
+  { label: 'J. Ortiz', avatar: IMAGES.retratoTrajeAzul.local },
+  { label: 'J. Mendoza', avatar: IMAGES.retratoTrajeOscuro.local },
 ]
 
 export function Features({ className }: { className?: string }) {

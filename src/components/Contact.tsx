@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion } from 'motion/react'
+import { m } from 'motion/react'
 import { ArrowUpRight } from 'lucide-react'
 import { SectionHeader } from './primitives'
 
@@ -58,7 +58,7 @@ export default function Contact() {
         align="center"
       />
 
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
@@ -155,7 +155,7 @@ export default function Contact() {
             </div>
           </form>
         )}
-      </motion.div>
+      </m.div>
     </section>
   )
 }

@@ -9,6 +9,9 @@ dist-ssr/
 # Cache de TypeScript
 *.tsbuildinfo
 
+# Reportes de scripts/lighthouse.ps1
+.lighthouse/
+
 # Logs
 logs/
 *.log

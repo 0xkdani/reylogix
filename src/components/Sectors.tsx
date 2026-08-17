@@ -1,5 +1,5 @@
 import type { ComponentType, SVGProps } from 'react'
-import { motion } from 'motion/react'
+import { m } from 'motion/react'
 import { IconTile, SectionHeader } from './primitives'
 import { IconAutomotive, IconCosmetics, IconFood, IconTech, IconTrade } from './ServiceIcons'
 
@@ -69,7 +69,7 @@ export default function Sectors() {
     <section id="sectores" aria-labelledby="sectores-titulo" className="shell py-16 md:py-24">
       {/* Texto suelto sobre el video: mismo halo que en el hero y en la cabecera
           de Servicios. */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
@@ -83,7 +83,7 @@ export default function Sectors() {
           intro="Operaciones donde el margen se decide en el detalle: un lote sin trazabilidad, un pedimento mal clasificado o una ventana de entrega perdida cuestan más que cualquier tarifa."
           align="center"
         />
-      </motion.div>
+      </m.div>
 
       <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 xl:gap-5">
         {SECTORS.map(({ icon, name, body, meta }, i) => (
@@ -94,7 +94,7 @@ export default function Sectors() {
            * Express. El único cambio al pasar el cursor lo hace IconTile, que
            * responde al `group` de la tarjeta.
            */
-          <motion.div
+          <m.div
             key={name}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -121,7 +121,7 @@ export default function Sectors() {
                 ))}
               </ul>
             ) : null}
-          </motion.div>
+          </m.div>
         ))}
       </div>
     </section>

@@ -1,5 +1,5 @@
 import type { ComponentType, SVGProps } from 'react'
-import { motion } from 'motion/react'
+import { m } from 'motion/react'
 import { ArrowUpRight } from 'lucide-react'
 import { GhostButton, IconTile, SectionHeader } from './primitives'
 import { IconCosts, IconDiagnostic, IconDocs, IconProcess } from './ServiceIcons'
@@ -47,7 +47,7 @@ const SERVICES: Service[] = [
 export default function ExpressServices() {
   return (
     <section id="servicios" aria-labelledby="servicios-titulo" className="shell py-20 md:py-28">
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
@@ -60,7 +60,7 @@ export default function ExpressServices() {
           title="Servicios Express"
           intro="Cuatro intervenciones acotadas para resolver un frente concreto de tu operación, sin comprometer a un programa completo."
         />
-      </motion.div>
+      </m.div>
 
       <div className="mt-12 grid sm:grid-cols-2 gap-5 xl:gap-6">
         {SERVICES.map(({ icon, title, body, meta }, i) => (
@@ -70,7 +70,7 @@ export default function ExpressServices() {
            * sitio: la única salida era un CTA genérico al pie de la retícula, así
            * que no se podía pedir *este* servicio.
            */
-          <motion.a
+          <m.a
             key={title}
             href={formUrlFor(title)}
             target="_blank"
@@ -116,7 +116,7 @@ export default function ExpressServices() {
               />
               <span className="sr-only">(abre el formulario en una pestaña nueva)</span>
             </span>
-          </motion.a>
+          </m.a>
         ))}
       </div>
 

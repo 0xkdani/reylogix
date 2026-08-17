@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "perf": "powershell -ExecutionPolicy Bypass -File scripts/lighthouse.ps1",
+    "perf:desktop": "powershell -ExecutionPolicy Bypass -File scripts/lighthouse.ps1 -FormFactor desktop"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.2.6",

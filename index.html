@@ -7,12 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#0A0C0F" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    />
+    <!-- Inter va auto-alojada (los @font-face estan en src/index.css), asi que
+         ya no hay hoja de estilos externa que bloquee el render ni preconnect a
+         googleapis/gstatic. Solo se precarga el subconjunto latin, que es el
+         unico que llega a descargarse con texto en castellano. -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-latin.woff2" crossorigin />
     <meta
       name="description"
       content="Reylogix diseña soluciones logísticas estratégicas con resultados medibles: auditoría de costos, documentación aduanal, diagnóstico operativo y rediseño de procesos."
