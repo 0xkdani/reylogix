@@ -32,3 +32,32 @@ export const LEGACY_HASH_ROUTES: Record<string, string> = {
   blackline: '/blackline',
   casos: '/casos',
 }
+
+/**
+ * Documentos legales: van solo en el Footer (y el banner de cookies enlaza
+ * el aviso de privacidad), no en NAV_LINKS/Navbar — no son secciones del
+ * producto, son avisos. Añadir un documento nuevo es una entrada aquí + un
+ * archivo en src/components/legal/ + una ruta lazy en App.tsx.
+ */
+export const LEGAL_LINKS: NavLinkDef[] = [
+  {
+    label: 'Aviso de privacidad',
+    to: '/legales/aviso-privacidad',
+    title: 'Aviso de Privacidad',
+  },
+  {
+    label: 'Términos y condiciones',
+    to: '/legales/terminos-condiciones',
+    title: 'Términos y Condiciones',
+  },
+  {
+    label: 'Datos y cumplimiento',
+    to: '/legales/datos-cumplimiento',
+    title: 'Datos y Cumplimiento',
+  },
+  {
+    label: 'Marca y propiedad intelectual',
+    to: '/legales/marca-propiedad-intelectual',
+    title: 'Marca y Propiedad Intelectual',
+  },
+]

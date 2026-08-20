@@ -1,3 +1,5 @@
+import typography from '@tailwindcss/typography'
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -99,5 +101,12 @@ export default {
       },
     },
   },
-  plugins: [],
+  /*
+   * Typography: única pieza que estiliza el texto de las páginas legales
+   * (src/components/legal/*.tsx) — el contenido ahí es HTML semántico plano
+   * (h2/h3/p/table/ul), sin clases de utilidad sueltas, y `prose` es quien
+   * decide tipografía, espaciado y color. No se usa en ningún otro lado del
+   * sitio: el resto de las secciones ya tiene su propio sistema de clases.
+   */
+  plugins: [typography],
 }
