@@ -31,6 +31,11 @@ const TerminosCondiciones = lazy(() => import('./components/legal/TerminosCondic
 const DatosCumplimiento = lazy(() => import('./components/legal/DatosCumplimiento'))
 const MarcaPropiedadIntelectual = lazy(() => import('./components/legal/MarcaPropiedadIntelectual'))
 
+// Panel interno de envíos del formulario de contacto. No es una sección del
+// sitio (no va en NAV_LINKS/Footer), así que tampoco tiene por qué competir
+// por el bundle inicial.
+const Recap = lazy(() => import('./components/Recap'))
+
 /**
  * Un enlace /#servicios de la época en que todo vivía en una sola página debe
  * seguir llevando a Servicios, no a la portada.
@@ -189,6 +194,7 @@ export default function App() {
                     path="/legales/marca-propiedad-intelectual"
                     element={<MarcaPropiedadIntelectual />}
                   />
+                  <Route path="/recap" element={<Recap />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </Suspense>

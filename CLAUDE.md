@@ -31,6 +31,14 @@ Router. Sin backend: los leads van a un formulario propio en Home
   `<BackgroundGlow />` (ver `App.tsx`, `useVideoBackground = pathname ===
   '/inicio2'`). Existe para comparar una versión contra la otra sin tocar la
   ruta por defecto; no lleva enlace en Navbar/Footer, solo la URL directa.
+- `/recap` (`src/components/Recap.tsx`): panel interno para revisar los
+  envíos del formulario de contacto. **Solo el front, a propósito** — el
+  login no valida contra nada real (cualquier correo/contraseña entra) y la
+  tabla lee de `MOCK_SUBMISSIONS`, no del formulario real. El plan es
+  Supabase Auth + una tabla real (la cuenta de Supabase ya existe y
+  `@supabase/supabase-js` ya es dependencia), pero conectarlo necesita
+  `VITE_SUPABASE_URL`/`VITE_SUPABASE_ANON_KEY` en un `.env` que todavía no
+  existe en el repo. No lleva enlace en Navbar/Footer.
 - `LazyMotion` + componentes `m.*` (no `motion.*`) para que el bundle solo
   cargue las features de motion que el sitio usa. El H1 del Hero es el
   elemento LCP y **no** usa motion: usa la utilidad CSS `.reveal-up`
