@@ -37,6 +37,21 @@ GRAFICOS = ["enfoque-collage.png"]
 # exactamente las nueve; una decima nunca llegaria a pintarse.
 STREAM = [f"stream-{i:02d}.jpg" for i in range(1, 10)]
 
+# Ya no las usa la UI (ver comentarios de cada entrada en src/images.ts: los
+# iconos de Servicios y el wordmark de Blackline se sustituyeron por SVG/texto
+# propio), pero se convierten igual para que ninguna imagen del repo quede sin
+# optimizar. blackline-evaluacion.jpg ni siquiera tiene entrada en images.ts
+# (fetch-images.ps1 la descarga pero nada la referencia); se incluye por lo
+# mismo, no por estar en uso.
+LEGACY = [
+    "blackline-wordmark.jpg",
+    "blackline-evaluacion.jpg",
+    "servicio-costos.jpg",
+    "servicio-aduanal.jpg",
+    "servicio-diagnostico.jpg",
+    "servicio-procesos.jpg",
+]
+
 
 def convertir(nombre: str, grafico: bool) -> tuple[int, int]:
     src = IMG / nombre
@@ -62,7 +77,7 @@ def convertir(nombre: str, grafico: bool) -> tuple[int, int]:
 def main() -> int:
     antes = despues = 0
     print(f"{'archivo':<28}{'origen':>9}{'webp':>9}{'ahorro':>9}")
-    for nombre in FOTOS + STREAM + GRAFICOS:
+    for nombre in FOTOS + STREAM + LEGACY + GRAFICOS:
         a, b = convertir(nombre, grafico=nombre in GRAFICOS)
         if not a:
             continue

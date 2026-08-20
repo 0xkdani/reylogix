@@ -14,19 +14,19 @@
 
 export type SiteImageSrc = { local: string; remote: string }
 
-const img = (n: string, remote: string): SiteImageSrc => ({
-  local: `/img/${n}.jpg`,
-  remote,
-})
-
 /**
- * Para los que la UI carga de verdad. El .jpg/.png sigue en public/img —es lo
- * que escriben fetch-images.ps1 y knockout-bg.ps1, y es la copia de origen—,
- * pero al navegador se le sirve el WebP: los cinco retratos y el collage pasan
- * de 460 KB a 210 KB juntos, un 55% menos, sin diferencia visible.
+ * El .jpg/.png sigue en public/img —es lo que escriben fetch-images.ps1 y
+ * knockout-bg.ps1, y es la copia de origen—, pero al navegador se le sirve
+ * el WebP: los cinco retratos y el collage pasan de 460 KB a 210 KB juntos,
+ * un 55% menos, sin diferencia visible.
  *
  * El collage va en WebP sin pérdida porque es un gráfico de línea con
  * transparencia: ahí lossless sale más pequeño (92 KB) que con pérdida (94 KB).
+ *
+ * Los cuatro iconos de Servicios y el wordmark de Blackline ya no los usa la
+ * UI (ver sus comentarios más abajo), pero se convirtieron igual —359 KB a
+ * 108 KB juntos, ~70% menos— para que ninguna imagen del repo quede sin
+ * optimizar aunque hoy no viaje al navegador.
  *
  * Para regenerarlos tras un fetch nuevo, ver scripts/to-webp.py.
  */
@@ -69,19 +69,19 @@ export const IMAGES = {
    * había que recortarlos con zoom, lo que los dejaba borrosos. Se conservan
    * como referencia de la fuente y porque scripts/fetch-images.ps1 los descarga.
    */
-  servicioCostos: img(
+  servicioCostos: imgWebp(
     'servicio-costos',
     'https://lh3.googleusercontent.com/sitesv/AG8ngQU-0UpHYfheqivZbfgMWi7t4ZU8FKgYomfRIMbb04JdMJ16N0iiVVaNAuVgAiXz5uktjnbZWSwMPVEJ_cVehJupp6XrDixl5V_K6aH0G13nRpvHhm6sgoMutFya7RFjzR8BrZ9xXczqMuvXsPw_vzmw_uu44J9Uh52SX-He7DzdGMlERywgnclGydRWDPg' + RJ,
   ),
-  servicioAduanal: img(
+  servicioAduanal: imgWebp(
     'servicio-aduanal',
     'https://lh3.googleusercontent.com/sitesv/AG8ngQXizNxWvshUNgsd-TmGPXly45yJmeS-j1I9w9OddNxtnJKA2JlFzvQlGHxll-28_0YgfVLXitMxjsK2vGL-Wk6akfb6p01WtvHsUelHPQF4Co-NtnpIHnzHuzH2LoY2DxhxKBsciaMv3rxe4TkZ2xYn5h7-HhHIMrErY5E5A2N0qgwoenSc6kBXto3vp_E' + RJ,
   ),
-  servicioDiagnostico: img(
+  servicioDiagnostico: imgWebp(
     'servicio-diagnostico',
     'https://lh3.googleusercontent.com/sitesv/AG8ngQWiAyzP8ipP4tqAVHOoF_eBeyyKwEpFvhMEQciwxCZwc156pik4EbfNgYwIbxHrvjDriJfaqKMDxJW-vHwsuVkvDQA4rfotMvVtU3B08je62UdP2kJ0HajufbpfodjcwuBt6kSJeeHSJCT1QfEN7PVq9u5M_b4V_8SBKVWSWFriP5xw2WnNsmqOzqhW' + RJ,
   ),
-  servicioProcesos: img(
+  servicioProcesos: imgWebp(
     'servicio-procesos',
     'https://lh3.googleusercontent.com/sitesv/AG8ngQX3Fw0BmN52nQC0_4PTagoX62D9Ewz-LlP-xM96-A8duYbPrL28rnr0JorO9NmuHAMbWNkn8XtrGBN7zOQHzwG_EViP6aiqyTPwkPl9c4ZOsjhH9lDcFYJRUeq6tvJrnxWBdG1azYNiYEAz4trDsfRGCDfNHYR4yvz4sgLbH0j3nmmLibAQ4oiIb-QL-DE' + RJ,
   ),
@@ -91,7 +91,7 @@ export const IMAGES = {
    * texto (.c3-wordmark) porque el JPEG traía un fondo negro opaco que recortaba
    * el video de fondo. Se conserva como referencia de la fuente.
    */
-  blacklineWordmark: img(
+  blacklineWordmark: imgWebp(
     'blackline-wordmark',
     'https://lh3.googleusercontent.com/sitesv/AG8ngQVWMKiYgmmQYUGJf-ukLhYsnzqXPAdr-q-kuIlqrAyqGWF-9J1qOs-QJ0mCyioTcdM4u-uNVAn0LKXYJ4Aj7yCcRsKXqeqGlK2j21eUi2bbqBoab5ILR2ec7b7_g_MOmm1fSpRiE8rae0uhbJN7He3fTSMGzt8StWVR5FLthD8AgxppdlQw1_Hhgu' + RJ,
   ),
