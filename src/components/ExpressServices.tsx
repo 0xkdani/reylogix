@@ -1,7 +1,7 @@
 import type { ComponentType, SVGProps } from 'react'
 import { m } from 'motion/react'
 import { ArrowUpRight } from 'lucide-react'
-import { GhostButton, IconTile, SectionHeader } from './primitives'
+import { IconTile, SectionHeader } from './primitives'
 import { IconCosts, IconDiagnostic, IconDocs, IconProcess } from './ServiceIcons'
 import { formUrlFor } from '../site'
 
@@ -120,14 +120,11 @@ export default function ExpressServices() {
         ))}
       </div>
 
-      {/* Alineado al eje del encabezado, no centrado: es la salida secundaria
-          para quien no sabe cuál de los cuatro necesita. */}
-      <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-4">
-        <p className="text-sm xl:text-[15px] text-white/60 text-plate">
-          ¿No estás seguro de cuál necesitas?
-        </p>
-        <GhostButton label="Solicita tu servicio express" />
-      </div>
+      {/* Aquí iba la salida secundaria ("¿No estás seguro de cuál necesitas?" +
+          "Solicita tu servicio express"). Se retiró entera: la pregunta solo
+          existía para justificar el botón, y sin él quedaba planteada sin
+          respuesta. Cada tarjeta sigue enlazando a su propio servicio, y el CTA
+          final de todas las rutas cubre a quien no sepa cuál elegir. */}
     </section>
   )
 }

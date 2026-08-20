@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import { CTAButton, GhostButton, gradientStyle } from './primitives'
+import { CTAButton, gradientStyle } from './primitives'
 
 /**
  * Las tres entradas usan la utilidad CSS `reveal-up`, no `m.*`.
@@ -44,7 +44,6 @@ export default function Hero() {
         className="reveal-up mt-10 flex flex-col sm:flex-row items-center gap-3"
       >
         <CTAButton label="Empieza a operar sin límites" href="#contacto" external={false} />
-        <GhostButton label="Solicita tu servicio express" />
       </div>
     </section>
   )

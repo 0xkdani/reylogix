@@ -40,3 +40,19 @@ export function formUrlFor(service?: string): string {
   url.searchParams.set(FORM_SERVICE_ENTRY, service)
   return url.toString()
 }
+
+/* ------------------------------------------------------------------ */
+/* Formulario propio (Home)                                            */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Nombre del parámetro con el que un enlace le dice al formulario de Home qué
+ * frente eligió quien hizo clic: "/?servicio=Blackline#contacto" llega con el
+ * <select> "Servicio de interés" ya resuelto (lo lee Contact.tsx).
+ *
+ * Hoy no lo produce ningún botón del sitio —el que lo usaba, "Solicitar acceso
+ * a Blackline", se retiró—, pero sigue en pie para enlaces de campaña o de
+ * correo. El valor tiene que coincidir con su opción en SERVICE_OPTIONS
+ * (Contact.tsx); si no, el <select> lo ignora y se queda en el placeholder.
+ */
+export const CONTACT_SERVICE_PARAM = 'servicio'

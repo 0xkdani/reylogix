@@ -506,14 +506,18 @@
 }
 
 /**
- * El velo protege la lectura del texto, y con el corredor quieto puede ser
- * mucho mas suave que con el en marcha.
+ * El velo protege la lectura del texto sin apagar las fotos.
  *
- * Es la razon de ser de `still`. Con las tarjetas moviendose, el contraste bajo
- * cada palabra cambiaba fotograma a fotograma, asi que hacia falta hundir el
- * centro casi a negro —y entonces las imagenes no se veian, que era pagar 317
- * KB por nada—. Congelado, el fondo de cada letra es fijo: basta con asegurar
- * la banda donde cae el texto y el resto puede respirar.
+ * Con el corredor en marcha el contraste bajo cada palabra cambia fotograma a
+ * fotograma. El primer intento lo resolvio hundiendo el centro casi a negro, y
+ * asi las imagenes no se veian: era pagar 317 KB por nada, y fue lo que llevo a
+ * congelar el corredor. El velo se queda suave y el contraste del texto lo
+ * garantiza su propia sombra (ver .c3-stream-claim), que viaja con las letras en
+ * vez de tapar el bloque entero.
+ *
+ * Lo unico que se ajusto al volver al movimiento es el alto de la radial: 40%
+ * cerraba justo encima de la tira de atributos, que caia ya fuera de la parte
+ * solida y le tocaba fondo distinto en cada pasada.
  *
  * Dos capas con trabajos distintos. La radial asienta el centro. La lineal
  * cierra arriba y abajo para que el corredor no choque de golpe con el borde
@@ -526,7 +530,7 @@
   pointer-events: none;
   background:
     radial-gradient(
-      44% 40% at 50% 50%,
+      44% 48% at 50% 50%,
       rgba(10, 12, 15, 0.8) 0%,
       rgba(10, 12, 15, 0.45) 62%,
       rgba(10, 12, 15, 0) 100%
@@ -601,6 +605,19 @@
   line-height: 1.35;
   letter-spacing: -0.015em;
   text-wrap: balance;
+  /*
+   * Con el corredor en marcha, el fondo de cada letra cambia solo: el contraste
+   * no puede depender del velo, porque subirlo lo bastante para el peor
+   * fotograma apaga las fotos el resto del tiempo. La sombra viaja con el texto,
+   * asi que resuelve el caso peor sin costarle nada al caso normal.
+   *
+   * Dos radios: el corto pega el borde de la letra y el largo asienta la mancha
+   * sobre lo que pase por debajo. Es el mismo recurso que el drop-shadow del
+   * titular del hero sobre el video.
+   */
+  text-shadow:
+    0 1px 2px rgba(10, 12, 15, 0.8),
+    0 2px 16px rgba(10, 12, 15, 0.85);
 }
 
 /* El balance va en cada linea y no solo en el <p>: son dos bloques flex
@@ -670,6 +687,11 @@
   line-height: 1.3;
   white-space: nowrap;
   color: rgba(255, 255, 255, 0.86);
+  /* Misma razon que en .c3-stream-claim, y aqui hace mas falta: la tira cae mas
+     abajo del eje, donde las tarjetas ya son grandes y pasan mas claras. */
+  text-shadow:
+    0 1px 2px rgba(10, 12, 15, 0.85),
+    0 2px 12px rgba(10, 12, 15, 0.8);
 }
 
 /* La palomita de 28px es la escala de las tarjetas, donde acompana a cinco
@@ -790,15 +812,6 @@
 }
 
 /* El CTA se ancla al fondo de la tarjeta y va por encima del overlay ::before. */
-.c3-cta {
-  margin-top: auto;
-  padding-top: 24px;
-  display: flex;
-  justify-content: center;
-  position: relative;
-  z-index: 1;
-}
-
 @media (max-width: 1024px) {
   .c3-watermark-main {
     font-size: 3.5rem;

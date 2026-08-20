@@ -1,5 +1,5 @@
 import { m } from 'motion/react'
-import { CTAButton, GhostButton } from './primitives'
+import { CTAButton } from './primitives'
 
 export default function FinalCTA() {
   return (
@@ -35,7 +35,6 @@ export default function FinalCTA() {
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
             <CTAButton label="Empieza a operar sin límites" href="/#contacto" external={false} />
-            <GhostButton label="Solicitar acceso a Blackline" />
           </div>
         </div>
       </m.div>

@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { m } from 'motion/react'
 import { ArrowUpRight } from 'lucide-react'
 import { SectionHeader } from './primitives'
+import { CONTACT_SERVICE_PARAM } from '../site'
 
 /**
  * Mismos cuatro Servicios Express de ExpressServices.tsx, más Blackline y un
@@ -47,6 +49,26 @@ function Field({
  */
 export default function Contact() {
   const [sent, setSent] = useState(false)
+  const [servicio, setServicio] = useState('')
+
+  /*
+   * Un enlace que ya dice a qué frente apunta llega con ?servicio=... y deja el
+   * <select> resuelto, para no pedir de nuevo algo que el clic ya dijo. Hoy no
+   * lo produce ningún botón del sitio (ver CONTACT_SERVICE_PARAM en site.ts);
+   * sirve para enlaces de campaña o de correo.
+   *
+   * Va en un efecto y no en el valor inicial del useState porque este bloque
+   * vive en la portada y no se remonta al navegar dentro de ella: un valor
+   * inicial no se volvería a leer si el parámetro cambia sin desmontar Contact.
+   * Se ignora un valor que no sea una de las opciones para no dejar el <select>
+   * en un estado que no puede pintar.
+   */
+  const [params] = useSearchParams()
+  const pedido = params.get(CONTACT_SERVICE_PARAM)
+
+  useEffect(() => {
+    if (pedido && SERVICE_OPTIONS.includes(pedido)) setServicio(pedido)
+  }, [pedido])
 
   return (
     <section id="contacto" aria-labelledby="contacto-titulo" className="shell py-20 md:py-28">
@@ -116,7 +138,13 @@ export default function Contact() {
             </Field>
 
             <Field label="Servicio de interés" htmlFor="servicio">
-              <select id="servicio" name="servicio" defaultValue="" className={FIELD_CLASS}>
+              <select
+                id="servicio"
+                name="servicio"
+                value={servicio}
+                onChange={(e) => setServicio(e.target.value)}
+                className={FIELD_CLASS}
+              >
                 <option value="" disabled>
                   Elige una opción
                 </option>
