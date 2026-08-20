@@ -287,6 +287,40 @@
 }
 
 /* ------------------------------------------------------------------ */
+/* Fondo animado (BackgroundGlow)                                      */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Deriva lento y sin corte —no hay fotograma de inicio/fin que empalmar,
+ * a diferencia del video que sustituye— porque `from` y `to` son el mismo
+ * estado: el bucle no tiene costura que fabricar.
+ *
+ * `transform-box: view-box` es necesario para que el `%` de transform-origin
+ * en un <g> de SVG se mida contra el viewBox y no contra un bounding box que
+ * cambia con la animación (soporte de Chrome/Firefox/Safari recientes).
+ *
+ * Bajo prefers-reduced-motion la regla global de arriba ya fuerza
+ * animation-duration a 0.01ms, así que esta animación se congela en su
+ * primer fotograma: el fondo se queda fijo, nunca en negro liso.
+ */
+@keyframes bg-ribbon-drift {
+  0%,
+  100% {
+    transform: translate3d(-1.2%, 1%, 0) rotate(-1.6deg) scale(1.05);
+  }
+  50% {
+    transform: translate3d(1.2%, -1%, 0) rotate(1.6deg) scale(1.1);
+  }
+}
+
+.bg-ribbon-drift {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: bg-ribbon-drift 24s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* ------------------------------------------------------------------ */
 /* Shiny gradient headline                                             */
 /* ------------------------------------------------------------------ */
 

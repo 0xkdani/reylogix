@@ -119,11 +119,11 @@ const NO_IMAGES: typeof STREAM = []
 
 /**
  * Las nueve fotos del corredor pesan 322 KB juntas y ninguna es contenido: se
- * montan en el primer 'idle', igual que el video de fondo del sitio (ver
- * useDeferredVideo en App.tsx). Hasta entonces el corredor gira con las
- * tarjetas vacias, que al no tener fondo propio no se ven: no hay recuadros
- * huerfanos ni salto de layout, porque el alto del bloque lo fija .c3-stream y
- * las tarjetas van en posicion absoluta.
+ * montan en el primer 'idle', el mismo patron que usaba antes el fondo global
+ * del sitio para su video (ahora CSS/SVG, ver BackgroundGlow). Hasta entonces
+ * el corredor gira con las tarjetas vacias, que al no tener fondo propio no se
+ * ven: no hay recuadros huerfanos ni salto de layout, porque el alto del
+ * bloque lo fija .c3-stream y las tarjetas van en posicion absoluta.
  *
  * No es un ahorro de bytes —se descargan igual— sino de LCP. Medido en movil:
  * con las fotos en el marcado desde el primer render, una de ellas ganaba la
