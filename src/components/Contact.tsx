@@ -1,9 +1,26 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { m } from 'motion/react'
 import { ArrowUpRight } from 'lucide-react'
 import { SectionHeader } from './primitives'
 import { CONTACT_SERVICE_PARAM } from '../site'
+
+/**
+ * Anti-spam sin fricción para el visitante ni servicios externos (reCAPTCHA):
+ * dos señales que un humano cumple sin darse cuenta y un bot casi nunca.
+ *
+ * 1. Honeypot: un campo que solo un bot que autorrellena formularios llega a
+ *    tocar (ver el <input> oculto más abajo). Si llega con valor, es spam.
+ * 2. Tiempo mínimo: un humano tarda al menos unos segundos en leer y llenar
+ *    el formulario; un bot lo envía casi al instante de cargarlo.
+ *
+ * Las dos son gratis en falsos positivos para gente real y no dependen de
+ * validar nada en un backend — hoy no hay uno (ver comentario más abajo), y
+ * el día que lo haya, esta misma pareja de checks se replica ahí antes de
+ * persistir el lead, no solo aquí.
+ */
+const HONEYPOT_FIELD = 'company_address'
+const MIN_HUMAN_SUBMIT_MS = 3000
 
 /**
  * Mismos cuatro Servicios Express de ExpressServices.tsx, más Blackline y un
@@ -45,11 +62,16 @@ function Field({
 /**
  * Solo diseño por ahora: onSubmit no manda nada a ningún lado todavía. La
  * conexión (Resend + endpoint) se resuelve aparte, una vez validado el
- * formulario visualmente.
+ * formulario visualmente. El gate anti-spam ya vive aquí desde ahora para no
+ * tener que acordarse de añadirlo el día que sí haya un envío real.
  */
 export default function Contact() {
   const [sent, setSent] = useState(false)
   const [servicio, setServicio] = useState('')
+  /** Momento en que este formulario apareció en pantalla (Contact va en el
+   *  bundle inicial de Home, así que esto es, en la práctica, la carga de la
+   *  página). Un envío antes de MIN_HUMAN_SUBMIT_MS después de esto es spam. */
+  const mountedAtRef = useRef(Date.now())
 
   /*
    * Un enlace que ya dice a qué frente apunta llega con ?servicio=... y deja el
@@ -99,9 +121,44 @@ export default function Contact() {
             className="grid grid-cols-1 md:grid-cols-2 gap-5"
             onSubmit={(e) => {
               e.preventDefault()
+
+              const data = new FormData(e.currentTarget)
+              const honeypotFilled = String(data.get(HONEYPOT_FIELD) ?? '').trim() !== ''
+              const submittedTooFast = Date.now() - mountedAtRef.current < MIN_HUMAN_SUBMIT_MS
+
+              if (honeypotFilled || submittedTooFast) {
+                /* Se descarta en silencio: el bot ve el mismo "enviado" que un
+                   humano, nunca un error, para no darle una señal de qué
+                   evadir en el próximo intento. */
+                setSent(true)
+                return
+              }
+
               setSent(true)
             }}
           >
+            {/* Honeypot: invisible para personas, visible para bots que
+                autorrellenan formularios. aria-hidden + tabIndex=-1 lo sacan
+                del árbol de accesibilidad y del orden de tabulación, así que
+                a un humano —incluido quien navega con lector de pantalla o
+                solo con teclado— nunca le aparece ni lo puede llenar por
+                accidente. Position absolute + fuera de pantalla en vez de
+                display:none: algunos bots ya saltan los campos display:none,
+                y este sigue siendo invisible igual. */}
+            <div
+              className="absolute -left-[9999px] top-0 h-px w-px overflow-hidden"
+              aria-hidden="true"
+            >
+              <label htmlFor={HONEYPOT_FIELD}>Sitio web</label>
+              <input
+                id={HONEYPOT_FIELD}
+                name={HONEYPOT_FIELD}
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </div>
+
             <Field label="Nombre" htmlFor="nombre">
               <input
                 id="nombre"
