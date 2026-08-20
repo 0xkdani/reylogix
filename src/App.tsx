@@ -1,6 +1,6 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
-import { LazyMotion, MotionConfig, useReducedMotion } from 'motion/react'
+import { LazyMotion, MotionConfig } from 'motion/react'
 
 const loadMotionFeatures = () => import('./motion-features').then((mod) => mod.default)
 import Navbar from './components/Navbar'
@@ -10,7 +10,9 @@ import Contact from './components/Contact'
 import FinalCTA from './components/FinalCTA'
 import Footer from './components/Footer'
 import CookieConsent from './components/CookieConsent'
-import { HOME_TITLE, LEGACY_HASH_ROUTES, NAV_LINKS } from './nav'
+import BackgroundGlow from './components/BackgroundGlow'
+import VideoBackground from './components/VideoBackground'
+import { HOME_TITLE, LEGACY_HASH_ROUTES, LEGAL_LINKS, NAV_LINKS } from './nav'
 
 // Rutas fuera de Home: se cargan bajo demanda para no engordar el bundle
 // inicial con código que la primera pintura no necesita. Contact no va aquí:
@@ -20,45 +22,14 @@ const ExpressServices = lazy(() => import('./components/ExpressServices'))
 const Testimonials = lazy(() => import('./components/Testimonials'))
 const Blackline = lazy(() => import('./components/Blackline'))
 
-// Recomprimido desde el original de CloudFront (16.5 MB, 1080p, 16 Mb/s) a
-// 720p/CRF 28 sin audio (el <video> ya va muted): 907 KB, ~94% más ligero.
-// Servirlo local también evita la conexión extra a un origen externo.
-const VIDEO_SRC = '/video/hero.mp4'
-
-/*
- * Variante para pantallas pequeñas: 640x360 y CRF 32, 55 KB frente a 991. Un
- * fondo a pantalla completa en un móvil se ve a ~400 px de ancho, así que los
- * 720p se estaban tirando: medido contra el original, este archivo da SSIM
- * 0.932 y el de 480p —130 KB, más del doble— solo sube a 0.936. Se mantiene
- * `-bf 0` del original, que es lo que evita el tirón al reiniciar el bucle.
- */
-const VIDEO_SRC_SM = '/video/hero-sm.mp4'
-const SMALL_SCREEN = '(max-width: 768px)'
-
-/**
- * El video es puramente decorativo (fondo fijo) y pesa varios MB: si se monta
- * de inmediato compite por ancho de banda con el JS y las fuentes críticas.
- * Se retrasa su montaje al primer 'idle' del navegador (en todos los tamaños,
- * incluido móvil: la animación se conserva, solo deja de bloquear la primera
- * pintura) para que esa carga quede detrás de todo lo que sí afecta el LCP.
- */
-function useDeferredVideo() {
-  const [src, setSrc] = useState<string | null>(null)
-
-  useEffect(() => {
-    const idle = 'requestIdleCallback' in window ? window.requestIdleCallback : setTimeout
-    const cancel = 'cancelIdleCallback' in window ? window.cancelIdleCallback : clearTimeout
-    /*
-     * El tamaño se decide una sola vez, aquí, y no se re-evalúa al girar el
-     * teléfono: cambiar el `src` remonta el vídeo y lo reinicia desde el
-     * primer fotograma, que se nota mucho más que servir 55 KB de más.
-     */
-    const id = idle(() => setSrc(window.matchMedia(SMALL_SCREEN).matches ? VIDEO_SRC_SM : VIDEO_SRC))
-    return () => cancel(id)
-  }, [])
-
-  return src
-}
+// Documentos legales: mismo patrón de carga diferida que las rutas de
+// arriba. Nadie llega a /legales/* desde la navegación principal (solo desde
+// el Footer o el banner de cookies), así que no hay razón para que compitan
+// por bundle inicial con Home.
+const AvisoPrivacidad = lazy(() => import('./components/legal/AvisoPrivacidad'))
+const TerminosCondiciones = lazy(() => import('./components/legal/TerminosCondiciones'))
+const DatosCumplimiento = lazy(() => import('./components/legal/DatosCumplimiento'))
+const MarcaPropiedadIntelectual = lazy(() => import('./components/legal/MarcaPropiedadIntelectual'))
 
 /**
  * Un enlace /#servicios de la época en que todo vivía en una sola página debe
@@ -101,12 +72,15 @@ function useScrollToTopOnNavigate() {
   }, [pathname, hash])
 }
 
-/** El <title> lo fija la ruta activa. */
+/** El <title> lo fija la ruta activa. Busca en NAV_LINKS y LEGAL_LINKS: son
+ *  dos listas separadas (una es el producto, la otra son avisos), pero
+ *  ambas necesitan su propio <title>. */
 function useDocumentTitle() {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    document.title = NAV_LINKS.find((l) => l.to === pathname)?.title ?? HOME_TITLE
+    document.title =
+      [...NAV_LINKS, ...LEGAL_LINKS].find((l) => l.to === pathname)?.title ?? HOME_TITLE
   }, [pathname])
 }
 
@@ -125,14 +99,18 @@ function Home() {
 }
 
 export default function App() {
-  // Con movimiento reducido no se monta el video: un bucle a pantalla completa
-  // es justo lo que esa preferencia pide evitar.
-  const reduceMotion = useReducedMotion()
-  const videoSrc = useDeferredVideo()
-
   useLegacyHashRedirect()
   useScrollToTopOnNavigate()
   useDocumentTitle()
+
+  /**
+   * `/inicio2` es la portada de siempre con el fondo de video original en
+   * vez de `BackgroundGlow` (ver VideoBackground.tsx) — para comparar una
+   * versión contra la otra sin tocar la ruta por defecto. No lleva enlace
+   * propio en Navbar/Footer, solo la URL directa.
+   */
+  const { pathname } = useLocation()
+  const useVideoBackground = pathname === '/inicio2'
 
   /*
    * El contenedor raíz recorta el eje X con 'clip', no con 'hidden'.
@@ -148,21 +126,8 @@ export default function App() {
    */
   return (
     <div className="relative min-h-screen overflow-x-clip bg-ink text-white">
-      {/* Video de fondo global */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        {reduceMotion || !videoSrc ? null : (
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="none"
-            aria-hidden="true"
-            className="w-full h-full object-cover pointer-events-none"
-            src={videoSrc}
-          />
-        )}
-      </div>
+      {/* Fondo animado global (o el video original en /inicio2, ver arriba) */}
+      {useVideoBackground ? <VideoBackground /> : <BackgroundGlow />}
 
       {/* Filtro de ruido global (titular con gradiente) */}
       <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
@@ -212,10 +177,18 @@ export default function App() {
               <Suspense fallback={<div className="min-h-screen" />}>
                 <Routes>
                   <Route path="/" element={<Home />} />
+                  <Route path="/inicio2" element={<Home />} />
                   <Route path="/enfoque" element={<Approach />} />
                   <Route path="/servicios" element={<ExpressServices />} />
                   <Route path="/blackline" element={<Blackline />} />
                   <Route path="/casos" element={<Testimonials />} />
+                  <Route path="/legales/aviso-privacidad" element={<AvisoPrivacidad />} />
+                  <Route path="/legales/terminos-condiciones" element={<TerminosCondiciones />} />
+                  <Route path="/legales/datos-cumplimiento" element={<DatosCumplimiento />} />
+                  <Route
+                    path="/legales/marca-propiedad-intelectual"
+                    element={<MarcaPropiedadIntelectual />}
+                  />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </Suspense>
